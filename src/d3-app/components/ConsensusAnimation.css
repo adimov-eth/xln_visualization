@@ -1,0 +1,173 @@
+.consensus-animation-group {
+  pointer-events: none;
+}
+
+/* Consensus round text styling */
+.consensus-animation-group text {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  user-select: none;
+}
+
+/* Validator particle effects */
+.consensus-animation-group circle {
+  filter: drop-shadow(0 0 4px currentColor);
+}
+
+/* Gossip path styling */
+.consensus-animation-group path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Success animations */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Proposer highlight */
+.consensus-proposer {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Consensus status colors */
+.consensus-success {
+  color: #00ff88;
+  fill: #00ff88;
+  stroke: #00ff88;
+}
+
+.consensus-failed {
+  color: #ff4444;
+  fill: #ff4444;
+  stroke: #ff4444;
+}
+
+.consensus-pending {
+  color: #ffaa00;
+  fill: #ffaa00;
+  stroke: #ffaa00;
+}
+
+/* Wave effect for gossip consensus */
+.consensus-wave {
+  animation: ripple 2s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Signature particle glow */
+.consensus-signature {
+  filter: blur(0.5px) drop-shadow(0 0 8px currentColor);
+}
+
+/* Round indicator styling */
+.consensus-round {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Animation performance optimization */
+.consensus-animation-group * {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Particle group optimizations */
+.particle-group {
+  pointer-events: none;
+}
+
+.particle {
+  mix-blend-mode: screen;
+  animation: fadeOut 1s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Consensus particle styling */
+.consensus-particle {
+  filter: drop-shadow(0 0 6px currentColor);
+  mix-blend-mode: screen;
+}
+
+/* Enhanced proposer styling */
+.consensus-proposer {
+  animation: pulse 1s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px #ff9900);
+}
+
+/* Impact ripple effect */
+@keyframes impact {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+/* Signature line animation */
+@keyframes signatureDraw {
+  0% {
+    stroke-dashoffset: 100;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Performance hints for browser */
+.consensus-animation-group {
+  contain: layout style paint;
+}
+
+.particle-group {
+  contain: strict;
+}
+
+/* GPU acceleration for particles */
+.particle,
+.consensus-particle {
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+/* Smooth animations on high refresh rate displays */
+@media (prefers-reduced-motion: no-preference) {
+  .consensus-animation-group * {
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

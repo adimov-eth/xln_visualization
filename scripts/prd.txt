@@ -1,0 +1,117 @@
+<context>
+# Overview  
+The XLN Network Interactive Visualization is a web‑based dashboard that gives developers, operators, investors, educators, and compliance teams a living, intuitive map of the Extended Lightning Network (XLN). It solves two primary problems:  
+1. **Comprehension** – XLN’s multi‑layered architecture and consensus mechanisms are difficult to grasp from static documentation.  
+2. **Operational Awareness** – Network operators lack a consolidated, real‑time view of entity health, channel liquidity, and cross‑chain activity.  
+
+By rendering network topology, consensus events, and payment flows in real time, the product accelerates onboarding, reduces troubleshooting time, and boosts stakeholder confidence.
+
+# Core Features
+
+| Feature                                  | What It Does                                                                   | Why It Matters                                           | High‑Level Operation                                                                                   |
+| ---------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Network Topology View**                | Force‑directed graph of depositaries, entities, and channels                   | Gives instant structural insight                         | D3.js renders hierarchical JSON; nodes sized by role, edges by capacity; WebSockets push delta updates |
+| **Layer Navigation System**              | Toggle between Blockchain, Depositary, Entity, Channel, and Transaction layers | Prevents visual overload; supports progressive discovery | UI layer controls filter graph data on client; layers share a common scene graph                       |
+| **Consensus Visualization**              | Animates proposer‑based and gossip‑based rounds                                | Exposes liveness/finality issues early                   | Client subscribes to consensus events; particles and progress rings animate validator signatures       |
+| **Cross‑Chain Flow Animation**           | Shows 8‑bit hash‑lock swaps across chains                                      | Clarifies security path and timing                       | Visual layer listens to bridge events; animates lock, reveal, and settlement across anchored chains    |
+| **Entity Deep Dive & Channel Inspector** | Contextual side panels with rich stats                                         | Eliminates context switching to CLI or logs              | Click handlers fetch on‑demand data via GraphQL                                                        |
+| **Time Machine Replay**                  | Rewinds any past state                                                         | Essential for audits and post‑mortems                    | Historical snapshots stored as compressed deltas; timeline slider rehydrates scene                     |
+| **Search & Filter System**               | Advanced query and saved views                                                 | Lets users focus on specific cohorts                     | Indexed maps on client; fuzzy search; filter presets stored in local storage                           |
+| **Metrics Dashboard & Alerts**           | Live KPIs, health scores, push alerts                                          | Turns raw data into actionable signals                   | Aggregation microservice streams summarized metrics and anomaly flags                                  |
+
+# User Experience
+
+**Personas**
+
+* *Operator Olivia* – Monitors hub liquidity and resolves disputes.
+* *Developer Dev* – Needs architectural clarity to build wallet integrations.
+* *Investor Ian* – Evaluates network growth and activity trends.
+
+**Key Flows**
+
+1. **Olivia** opens dashboard → filters by her hub → spots channel nearing credit limit → initiates rebalance.
+2. **Dev** toggles to Entity Layer → drills into governance configuration → downloads GraphQL schema.
+3. **Ian** drags timeline slider to compare TVL growth over quarter → exports chart for pitch deck.
+
+**UI/UX Considerations**
+
+* Hover reveals; click locks details.
+* Keyboard shortcuts for layer toggles.
+* Color‑blind‑safe palette; WCAG 2.1 AA compliance.
+* Smooth 60 FPS zoom, pan, and node drag with WebGL fallback to Canvas.
+
+</context>
+
+<PRD>
+# Technical Architecture  
+- **System Components**  
+  - Client SPA (React + D3.js + Three.js)  
+  - Real‑time Data Gateway (WebSocket, GraphQL subscriptions)  
+  - Metrics Aggregator Service  
+  - Historical Snapshot Store (delta‑compressed object store)  
+- **Data Models**  
+  - `NetworkState` (versioned, diffable)  
+  - `Entity`, `Channel`, `Depositary`, `ConsensusEvent`, `Transaction`  
+- **APIs & Integrations**  
+  - GraphQL for query/mutate, REST for batch history export  
+  - WebSocket for live diffs and alerts  
+  - On‑chain reserve fetchers (Ethereum, Bitcoin, Solana RPC)  
+- **Infrastructure Requirements**  
+  - CDN‑served static assets  
+  - Autoscaled Node.js microservices  
+  - Managed Timeseries DB for metrics (e.g., TimescaleDB)  
+  - TLS‑terminated WebSocket endpoints; read‑only ACL by default
+
+# Development Roadmap
+
+**Phase A – Foundation (MVP)**
+
+* Static topology render (Entities, Depositaries, Channels)
+* Basic pan/zoom, hover, click interactions
+* WebSocket pipe for live diff ingestion
+* Metrics panel: TVL, entity & channel counts
+
+**Phase B – Consensus & Flows**
+
+* Real‑time proposer/gossip animations
+* Transaction Layer with live payment routing paths
+* Channel Inspector and Entity Deep Dive panels
+
+**Phase C – Advanced Discovery**
+
+* Layer Navigation System with filters & saved views
+* Time Machine Replay with snapshot diffing
+* Cross‑Chain Flow Animation (hash‑lock visual)
+
+**Phase D – Operational Excellence**
+
+* Alert engine with anomaly detection hooks
+* 3D network view option (Three.js)
+* Accessibility polish and mobile‑responsive layout
+
+# Logical Dependency Chain
+
+1. **Data Gateway & Models** → underpin every visual.
+2. **Static Graph Render** → earliest visible deliverable; validates data contract.
+3. **Incremental Live Updates** → enables genuine real‑time UX.
+4. **Detail Panels & Inspectors** → built atop stable entity/channel endpoints.
+5. **Consensus & Flow Animations** → require reliable event streaming.
+6. **Historical Replay** → depends on snapshot pipeline in production.
+7. **Alerting & Advanced Filters** → leverage mature metrics and search indices.
+
+# Risks and Mitigations
+
+| Risk                                           | Impact                 | Mitigation                                                      |
+| ---------------------------------------------- | ---------------------- | --------------------------------------------------------------- |
+| 10K‑node render stalls browser                 | Unusable UI            | WebGL render, progressive loading, level‑of‑detail culling      |
+| Inconsistent event schemas across entity nodes | Visualization glitches | Define strict protobuf/GraphQL contract; version‑gated rollouts |
+| Scope creep on 3D view                         | Delays core delivery   | Time‑box as optional enhancement; ship after stable 2D          |
+| Alert fatigue from noisy metrics               | Users ignore dashboard | Threshold tuning, alert aggregation, user‑configurable rules    |
+
+# Appendix
+
+* Glossary of visual elements (Entity node, Channel edge, Consensus particle, etc.)
+* Example workflows (hub liquidity monitor, cross‑chain swap trace)
+* Data schema definitions and WebSocket message formats
+
+</PRD>

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(task-master:*)",
+      "Bash(node:*)",
+      "Bash([ -f .env ])",
+      "Bash(grep:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)",
+      "Bash(cd:*)"
+    ],
+    "deny": []
+  }
+}

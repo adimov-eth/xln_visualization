@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Test Client</title>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #messages {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-radius: 3px;
+        }
+        .event-type {
+            font-weight: bold;
+            color: #0066cc;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>XLN WebSocket Test Client</h1>
+    <div id="connection-status">Connecting...</div>
+    
+    <div>
+        <button onclick="requestState()">Request State</button>
+        <button onclick="requestMetrics()">Request Metrics</button>
+        <button onclick="clearMessages()">Clear Messages</button>
+    </div>
+    
+    <div id="messages"></div>
+    
+    <script>
+        const socket = io('http://localhost:3001');
+        const messagesDiv = document.getElementById('messages');
+        const statusDiv = document.getElementById('connection-status');
+        
+        function addMessage(type, data) {
+            const message = document.createElement('div');
+            message.className = 'message';
+            const timestamp = new Date().toLocaleTimeString();
+            message.innerHTML = `
+                <div class="event-type">${type} - ${timestamp}</div>
+                <pre>${JSON.stringify(data, (key, value) => 
+                    typeof value === 'bigint' ? value.toString() : value
+                , 2)}</pre>
+            `;
+            messagesDiv.appendChild(message);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        socket.on('connect', () => {
+            statusDiv.textContent = 'Connected';
+            statusDiv.style.color = 'green';
+            addMessage('CONNECTED', { socketId: socket.id });
+        });
+        
+        socket.on('disconnect', () => {
+            statusDiv.textContent = 'Disconnected';
+            statusDiv.style.color = 'red';
+            addMessage('DISCONNECTED', {});
+        });
+        
+        socket.on('network:update', (update) => {
+            addMessage('NETWORK UPDATE', {
+                type: update.type,
+                timestamp: update.timestamp,
+                data: update.type === 'state' ? 
+                    `State with ${update.data.nodes.length} nodes and ${update.data.channels.length} channels` :
+                    update.data
+            });
+        });
+        
+        socket.on('network:metrics', (metrics) => {
+            addMessage('METRICS', metrics);
+        });
+        
+        socket.on('consensus:event', (event) => {
+            addMessage('CONSENSUS EVENT', event);
+        });
+        
+        socket.on('swap:event', (swap) => {
+            addMessage('SWAP EVENT', swap);
+        });
+        
+        socket.on('swap:update', (swap) => {
+            addMessage('SWAP UPDATE', swap);
+        });
+        
+        function requestState() {
+            socket.emit('request:state');
+        }
+        
+        function requestMetrics() {
+            socket.emit('request:metrics');
+        }
+        
+        function clearMessages() {
+            messagesDiv.innerHTML = '';
+        }
+    </script>
+</body>
+</html>

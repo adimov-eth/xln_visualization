@@ -1,0 +1,53 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "checkJs": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/d3-app/*"],
+      "@components/*": ["src/d3-app/components/*"],
+      "@utils/*": ["src/d3-app/utils/*"],
+      "@services/*": ["src/d3-app/services/*"],
+      "@hooks/*": ["src/d3-app/hooks/*"],
+      "@types/*": ["src/d3-app/types/*"],
+      "@contexts/*": ["src/d3-app/contexts/*"],
+      "@styles/*": ["src/d3-app/styles/*"],
+      "@assets/*": ["src/d3-app/assets/*"]
+    },
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "removeComments": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "tests",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "console.js",
+    "scripts/**/*"
+  ]
+}
