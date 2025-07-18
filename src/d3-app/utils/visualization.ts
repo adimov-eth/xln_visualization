@@ -1,5 +1,24 @@
 import { NetworkNode, Channel, NodeType, EntityNode } from '../types/network.types';
 
+// Safe BigInt conversion utilities
+function safeBigIntToNumber(value: bigint | undefined | null, defaultValue: number = 0): number {
+  if (value === undefined || value === null) return defaultValue;
+  try {
+    return Number(value);
+  } catch {
+    return defaultValue;
+  }
+}
+
+function safeToEther(value: bigint | undefined | null, defaultValue: number = 0): number {
+  if (value === undefined || value === null) return defaultValue;
+  try {
+    return Number(value / BigInt(1e18));
+  } catch {
+    return defaultValue;
+  }
+}
+
 // Color palette for different node types
 const NODE_COLORS = {
   [NodeType.JURISDICTION]: '#8b5cf6', // Purple
@@ -34,7 +53,7 @@ export function getNodeSize(node: NetworkNode): number {
     case NodeType.ENTITY:
       // Size based on TVL
       const entity = node as EntityNode;
-      const tvl = Number(entity.tvl / BigInt(1e18));
+      const tvl = safeToEther(entity.tvl, 0);
       const baseSize = 20;
       const scaleFactor = Math.log10(tvl + 1) * 2;
       return Math.min(baseSize + scaleFactor, 35);
@@ -51,7 +70,9 @@ export function getChannelColor(channel: Channel): string {
     return '#475569'; // Inactive gray
   }
   
-  const utilization = Number(channel.available) / Number(channel.capacity);
+  const available = safeBigIntToNumber(channel.available, 0);
+  const capacity = safeBigIntToNumber(channel.capacity, 1);
+  const utilization = available / capacity;
   
   if (utilization < 0.2) {
     return '#ef4444'; // Red - low liquidity
@@ -64,7 +85,7 @@ export function getChannelColor(channel: Channel): string {
 
 // Get channel width based on capacity
 export function getChannelWidth(channel: Channel): number {
-  const capacity = Number(channel.capacity / BigInt(1e18));
+  const capacity = safeToEther(channel.capacity, 0);
   const baseWidth = 1;
   const scaleFactor = Math.log10(capacity + 1) * 0.5;
   return Math.min(baseWidth + scaleFactor, 6);
@@ -72,7 +93,7 @@ export function getChannelWidth(channel: Channel): number {
 
 // Format large numbers for display
 export function formatNumber(value: number | bigint): string {
-  const num = typeof value === 'bigint' ? Number(value / BigInt(1e18)) : value;
+  const num = typeof value === 'bigint' ? safeToEther(value, 0) : value;
   
   if (num >= 1e9) {
     return `${(num / 1e9).toFixed(1)}B`;
@@ -108,7 +129,9 @@ export function getNodeTooltip(node: NetworkNode): string {
 
 // Get channel tooltip content
 export function getChannelTooltip(channel: Channel): string {
-  const utilization = (Number(channel.available) / Number(channel.capacity) * 100).toFixed(1);
+  const available = safeBigIntToNumber(channel.available, 0);
+  const capacity = safeBigIntToNumber(channel.capacity, 1);
+  const utilization = (available / capacity * 100).toFixed(1);
   
   return [
     `Channel: ${channel.id}`,
