@@ -1,0 +1,11 @@
+# Task ID: 8
+# Title: Build 'Time Machine' Historical Replay
+# Status: pending
+# Dependencies: 1, 3
+# Priority: low
+# Description: Develop the backend Historical Snapshot Store and the frontend timeline slider UI. This will allow users to rewind and replay the network state at any point in the past, which is essential for audits and post-mortems.
+# Details:
+Backend will store historical snapshots as compressed deltas. The frontend slider will trigger rehydration of the D3 scene from these historical snapshots.
+
+# Test Strategy:
+Load a series of historical snapshots. Drag the timeline slider and verify the network view accurately reflects the state for the selected timestamp. Test performance of state rehydration.

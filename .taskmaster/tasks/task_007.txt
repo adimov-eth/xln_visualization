@@ -1,0 +1,11 @@
+# Task ID: 7
+# Title: Implement Layer Navigation and Advanced Filtering
+# Status: pending
+# Dependencies: 5
+# Priority: medium
+# Description: Build the UI for the 'Layer Navigation System' to toggle between Blockchain, Depositary, Entity, and other views. Implement a client-side search system with fuzzy search and allow users to create and save filter presets to local storage.
+# Details:
+This feature helps manage visual complexity. Layer toggles will filter the data rendered in the main scene graph. Search should index node properties on the client for performance.
+
+# Test Strategy:
+Unit tests for filtering logic. E2E tests for toggling layers and verifying the graph updates. Test saving and loading filter views from local storage.

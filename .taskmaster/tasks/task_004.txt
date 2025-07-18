@@ -1,0 +1,11 @@
+# Task ID: 4
+# Title: Implement Core UI Interactivity & Basic Metrics Panel
+# Status: pending
+# Dependencies: 3
+# Priority: high
+# Description: Develop fundamental user interactions for the graph: pan, zoom (60 FPS), and node dragging. Implement hover-to-reveal tooltips and click-to-lock behavior. Add the initial Metrics Dashboard panel to display TVL, entity, and channel counts.
+# Details:
+Use WebGL with a Canvas fallback for rendering performance. Metrics will be streamed from the aggregation microservice. This task completes the Phase A MVP.
+
+# Test Strategy:
+Manual UX testing for smoothness of pan/zoom/drag. Automated tests to verify that hover and click events trigger the correct state changes. Verify metrics panel updates with data from a mock stream.

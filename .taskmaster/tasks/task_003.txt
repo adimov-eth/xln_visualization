@@ -1,0 +1,11 @@
+# Task ID: 3
+# Title: Integrate Real-time Data Stream
+# Status: pending
+# Dependencies: 1, 2
+# Priority: high
+# Description: Connect the frontend D3.js graph to the backend WebSocket gateway. The client must subscribe to and process live delta updates to incrementally update the network topology without full re-renders.
+# Details:
+The client will listen for `NetworkState` diffs pushed over the WebSocket connection and apply them to the D3 scene graph. This enables the genuine real-time UX.
+
+# Test Strategy:
+Mock WebSocket server pushes a sequence of diffs. Verify the client-side graph updates correctly and efficiently. Performance test to ensure smooth updates.

@@ -1,0 +1,142 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Backend Foundation: Data Models & Real-time Gateway",
+        "description": "Establish the backend infrastructure. Define core data models (Entity, Channel, etc.) and implement the Real-time Data Gateway using WebSocket for live updates and GraphQL for subscriptions.",
+        "details": "Components: Real-time Data Gateway, Metrics Aggregator Service. Data Models: `NetworkState`, `Entity`, `Channel`, `Depositary`, `ConsensusEvent`, `Transaction`. APIs: GraphQL for query/mutate, WebSocket for live diffs.",
+        "testStrategy": "Unit tests for data models. Integration tests for WebSocket connection and GraphQL schema validation. Verify that the gateway can push mock `NetworkState` diffs.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Frontend Foundation: SPA Setup & Static Graph Rendering",
+        "description": "Initialize the client-side React Single Page Application (SPA). Implement the 'Network Topology View' to render a static, force-directed graph of entities, depositaries, and channels using D3.js.",
+        "details": "Tech stack: React + D3.js. The graph should render hierarchical JSON data. Nodes should be sized by role and edges by capacity as per the PRD. This is the first visible deliverable.",
+        "testStrategy": "Render a static graph from a fixture JSON file. Verify that nodes and edges are displayed correctly. Component snapshot testing.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Integrate Real-time Data Stream",
+        "description": "Connect the frontend D3.js graph to the backend WebSocket gateway. The client must subscribe to and process live delta updates to incrementally update the network topology without full re-renders.",
+        "details": "The client will listen for `NetworkState` diffs pushed over the WebSocket connection and apply them to the D3 scene graph. This enables the genuine real-time UX.",
+        "testStrategy": "Mock WebSocket server pushes a sequence of diffs. Verify the client-side graph updates correctly and efficiently. Performance test to ensure smooth updates.",
+        "priority": "high",
+        "dependencies": [
+          1,
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Implement Core UI Interactivity & Basic Metrics Panel",
+        "description": "Develop fundamental user interactions for the graph: pan, zoom (60 FPS), and node dragging. Implement hover-to-reveal tooltips and click-to-lock behavior. Add the initial Metrics Dashboard panel to display TVL, entity, and channel counts.",
+        "details": "Use WebGL with a Canvas fallback for rendering performance. Metrics will be streamed from the aggregation microservice. This task completes the Phase A MVP.",
+        "testStrategy": "Manual UX testing for smoothness of pan/zoom/drag. Automated tests to verify that hover and click events trigger the correct state changes. Verify metrics panel updates with data from a mock stream.",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Develop Entity Deep Dive & Channel Inspector Panels",
+        "description": "Create the contextual side panels that appear on user interaction. Implement click handlers on graph nodes and edges to fetch detailed on-demand data via GraphQL and display rich statistics, eliminating the need for CLI tools.",
+        "details": "These panels are a key part of the 'Operational Awareness' goal. The GraphQL queries should be designed to fetch specific entity or channel data efficiently.",
+        "testStrategy": "Click a node/edge and verify the correct GraphQL query is sent. Assert that the side panel is populated with the returned data. Test loading and error states.",
+        "priority": "medium",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Build Consensus Visualization",
+        "description": "Implement the real-time animation of consensus rounds. The client will subscribe to consensus events and visualize proposer selection and validator signatures using animated particles and progress rings.",
+        "details": "This feature directly addresses the 'Comprehension' problem by making abstract consensus mechanisms visible and intuitive. It requires a reliable event stream from the gateway.",
+        "testStrategy": "Feed a stream of mock `ConsensusEvent` data. Verify that animations trigger correctly and represent the event data accurately (e.g., proposer, validators).",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Layer Navigation and Advanced Filtering",
+        "description": "Build the UI for the 'Layer Navigation System' to toggle between Blockchain, Depositary, Entity, and other views. Implement a client-side search system with fuzzy search and allow users to create and save filter presets to local storage.",
+        "details": "This feature helps manage visual complexity. Layer toggles will filter the data rendered in the main scene graph. Search should index node properties on the client for performance.",
+        "testStrategy": "Unit tests for filtering logic. E2E tests for toggling layers and verifying the graph updates. Test saving and loading filter views from local storage.",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Build 'Time Machine' Historical Replay",
+        "description": "Develop the backend Historical Snapshot Store and the frontend timeline slider UI. This will allow users to rewind and replay the network state at any point in the past, which is essential for audits and post-mortems.",
+        "details": "Backend will store historical snapshots as compressed deltas. The frontend slider will trigger rehydration of the D3 scene from these historical snapshots.",
+        "testStrategy": "Load a series of historical snapshots. Drag the timeline slider and verify the network view accurately reflects the state for the selected timestamp. Test performance of state rehydration.",
+        "priority": "low",
+        "dependencies": [
+          1,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Animate Cross-Chain Swaps",
+        "description": "Create the 'Cross-Chain Flow Animation' to visualize 8-bit hash-lock swaps. The client will listen to bridge events and animate the lock, reveal, and settlement phases across the different anchored chains in the view.",
+        "details": "This feature clarifies the security path and timing of cross-chain transactions, a key aspect of the XLN architecture. It depends on the client subscribing to bridge events.",
+        "testStrategy": "Simulate a cross-chain swap event sequence. Verify the animation correctly depicts the lock, reveal, and settlement stages on the appropriate chains.",
+        "priority": "low",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Enhance Dashboard with Alerts & Finalize Accessibility",
+        "description": "Implement the full 'Metrics Dashboard & Alerts' feature, including health scores and user-configurable push alerts for anomalies. Perform a final accessibility polish to ensure WCAG 2.1 AA compliance and a mobile-responsive layout.",
+        "details": "Alerts will be driven by an aggregation microservice that streams anomaly flags. This task focuses on turning raw data into actionable signals for operators and completing the operational excellence goals.",
+        "testStrategy": "Trigger mock anomaly flags and verify alerts are displayed. Use accessibility audit tools (e.g., Lighthouse, Axe) to check for compliance. Test layout on various mobile screen sizes.",
+        "priority": "low",
+        "dependencies": [
+          4,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-07-18T08:17:39.125Z",
+      "updated": "2025-07-18T08:17:39.125Z",
+      "description": "Tasks for master context"
+    }
+  }
+}

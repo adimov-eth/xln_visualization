@@ -1,0 +1,11 @@
+# Task ID: 5
+# Title: Develop Entity Deep Dive & Channel Inspector Panels
+# Status: pending
+# Dependencies: 4
+# Priority: medium
+# Description: Create the contextual side panels that appear on user interaction. Implement click handlers on graph nodes and edges to fetch detailed on-demand data via GraphQL and display rich statistics, eliminating the need for CLI tools.
+# Details:
+These panels are a key part of the 'Operational Awareness' goal. The GraphQL queries should be designed to fetch specific entity or channel data efficiently.
+
+# Test Strategy:
+Click a node/edge and verify the correct GraphQL query is sent. Assert that the side panel is populated with the returned data. Test loading and error states.

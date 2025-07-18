@@ -1,0 +1,11 @@
+# Task ID: 2
+# Title: Frontend Foundation: SPA Setup & Static Graph Rendering
+# Status: pending
+# Dependencies: 1
+# Priority: high
+# Description: Initialize the client-side React Single Page Application (SPA). Implement the 'Network Topology View' to render a static, force-directed graph of entities, depositaries, and channels using D3.js.
+# Details:
+Tech stack: React + D3.js. The graph should render hierarchical JSON data. Nodes should be sized by role and edges by capacity as per the PRD. This is the first visible deliverable.
+
+# Test Strategy:
+Render a static graph from a fixture JSON file. Verify that nodes and edges are displayed correctly. Component snapshot testing.

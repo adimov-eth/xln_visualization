@@ -1,0 +1,11 @@
+# Task ID: 10
+# Title: Enhance Dashboard with Alerts & Finalize Accessibility
+# Status: pending
+# Dependencies: 4, 7
+# Priority: low
+# Description: Implement the full 'Metrics Dashboard & Alerts' feature, including health scores and user-configurable push alerts for anomalies. Perform a final accessibility polish to ensure WCAG 2.1 AA compliance and a mobile-responsive layout.
+# Details:
+Alerts will be driven by an aggregation microservice that streams anomaly flags. This task focuses on turning raw data into actionable signals for operators and completing the operational excellence goals.
+
+# Test Strategy:
+Trigger mock anomaly flags and verify alerts are displayed. Use accessibility audit tools (e.g., Lighthouse, Axe) to check for compliance. Test layout on various mobile screen sizes.

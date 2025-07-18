@@ -1,0 +1,11 @@
+# Task ID: 1
+# Title: Backend Foundation: Data Models & Real-time Gateway
+# Status: pending
+# Dependencies: None
+# Priority: high
+# Description: Establish the backend infrastructure. Define core data models (Entity, Channel, etc.) and implement the Real-time Data Gateway using WebSocket for live updates and GraphQL for subscriptions.
+# Details:
+Components: Real-time Data Gateway, Metrics Aggregator Service. Data Models: `NetworkState`, `Entity`, `Channel`, `Depositary`, `ConsensusEvent`, `Transaction`. APIs: GraphQL for query/mutate, WebSocket for live diffs.
+
+# Test Strategy:
+Unit tests for data models. Integration tests for WebSocket connection and GraphQL schema validation. Verify that the gateway can push mock `NetworkState` diffs.

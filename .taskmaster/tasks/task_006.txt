@@ -1,0 +1,11 @@
+# Task ID: 6
+# Title: Build Consensus Visualization
+# Status: pending
+# Dependencies: 3
+# Priority: medium
+# Description: Implement the real-time animation of consensus rounds. The client will subscribe to consensus events and visualize proposer selection and validator signatures using animated particles and progress rings.
+# Details:
+This feature directly addresses the 'Comprehension' problem by making abstract consensus mechanisms visible and intuitive. It requires a reliable event stream from the gateway.
+
+# Test Strategy:
+Feed a stream of mock `ConsensusEvent` data. Verify that animations trigger correctly and represent the event data accurately (e.g., proposer, validators).

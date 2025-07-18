@@ -1,0 +1,11 @@
+# Task ID: 9
+# Title: Animate Cross-Chain Swaps
+# Status: pending
+# Dependencies: 3
+# Priority: low
+# Description: Create the 'Cross-Chain Flow Animation' to visualize 8-bit hash-lock swaps. The client will listen to bridge events and animate the lock, reveal, and settlement phases across the different anchored chains in the view.
+# Details:
+This feature clarifies the security path and timing of cross-chain transactions, a key aspect of the XLN architecture. It depends on the client subscribing to bridge events.
+
+# Test Strategy:
+Simulate a cross-chain swap event sequence. Verify the animation correctly depicts the lock, reveal, and settlement stages on the appropriate chains.
