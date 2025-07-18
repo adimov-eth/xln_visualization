@@ -11,15 +11,15 @@ Traditional blockchains and layer-2s have multiplied into a tangled web: dozens 
 Crypto is still hard to use for regular people:
 
 - **Fragmentation:** Ethereum, Solana, Avalanche and dozens of other chains have separate wallets, tokens and bridge risks. Users must manage seed phrases, gas fees and cross-chain bridges just to move value. DeFi and NFT ecosystems are siloed, making onboarding overwhelming.
-    
 - **Operational centrality & censorship risk in rollups:** Popular optimistic rollups such as Optimism rely on a **single sequencer** managed by an operator ¹. Transactions sent directly to that sequencer are cheaper but **cannot be censorship resistant**, because the sequencer is the only participant that knows about them ¹. Misbehaving sequencers can censor users or delay blocks; if there is only one sequencer, censorship can be very effective ². Many rollups remain highly centralized, so a single sequencer failure can halt the entire network ³.
-    
 - **Exit latency:** In optimistic rollups, withdrawals back to the main chain are subject to a **challenge window**. Optimism's documentation notes that after you submit a withdrawal proof, you must wait until the fault challenge period ends—“a week on mainnet” ⁴. Only if a proposed state commitment goes unchallenged for the duration of this 7-day window is it considered final ⁴. This delay is acceptable for traders but painful for everyday payments.
-    
 - **User-funded channels in Lightning:** The Lightning Network requires senders and receivers to lock funds in channels. The amount a node can receive is limited by its remote balance ⁵; new merchants often have no inbound capacity ⁵. While LN is not the focus of this litepaper, it illustrates how existing L2s force users to pre-fund liquidity or wait for counterparties.
-    
 
 These limitations contribute to the perception that crypto is only for experts. To reach mainstream adoption, we need a system that unifies liquidity across chains, reduces dependence on centralized sequencers and eliminates long withdrawal delays.
+
+- **Central sequencer risk:** Rollups depend heavily on a central sequencer, creating potential censorship points and single points of failure.
+- **Withdrawal delays:** Users face mandatory 7-day withdrawal delays due to the fraud-proof challenge window, complicating real-world payments.
+- **Liquidity inefficiency:** Full-reserve requirements lock substantial liquidity, reducing overall capital efficiency.
 
 ---
 
@@ -32,42 +32,33 @@ The result is a **topology** where multiple blockchains and jurisdictions connec
 ## 3 How it works (high-level)
 
 1. **Depositaries on each chain:** For every supported token (e.g., ETH, USDC on Ethereum; SOL; wBTC on Bitcoin), a depositary contract holds the collateral. Depositary contracts expose functions to deposit, withdraw and settle disputes. They also publish Merkle-root snapshots of their reserves so anyone can verify solvency and credit exposure ⁶.
-    
 2. **Entities as sovereign machines:** An entity is a programmable state machine with its own quorum (board). It can issue tokens, open accounts and credit lines, and run internal DeFi logic ⁸. Entities interact with depositaries by submitting signed receipts; the depositary does not know or control the entity's internal state ⁶.
-    
 3. **Credit-line channels:** Within an entity, accounts represent bilateral credit relationships. Suppose Alice wants to pay Bob but has no inbound liquidity. Bob (or a hub) can extend a **soft/hard credit limit** to Alice; Alice can receive payments up to the hard limit without pre-funding, and the hub settles with the depositary when the soft limit is exceeded ⁷. Uninsured balances are signed promises enforceable on-chain; deposit insurance ensures hubs remain solvent ⁷.
-    
 4. **Cross-chain transfers:** To move assets between chains, a user opens a channel with a hub connected to both depositaries. The hub uses an 8-bit hash-locked HTLC to atomically exchange tokens; each bit corresponds to a partial execution of the swap ⁹. If the swap is partially executed, the remaining bits remain locked until they expire or are redeemed. Receipts from one depositary allow claiming collateral from another, enabling atomic cross-jurisdiction swaps.
-    
 5. **Local finality & global anchoring:** Entities finalize blocks locally every 100 ms and commit them to their internal Merkle store. Periodically, entities publish their Merkle roots to their depositary (or directly to L1), providing **hash-checked snapshots** that other parties can verify ¹⁰. There is no single sequencer; each entity's board decides when to publish. This reduces censorship risk and ensures that failure of one entity does not affect others.
-    
 
 ---
 
 ## 4 Benefits and real-world implications
 
-|   |   |   |
-|---|---|---|
-|Benefit|Real-world implication|Evidence|
-|**Speed & low latency**|Users enjoy sub-second confirmation for most payments because entities commit blocks every 100 ms and hubs have near-instant credit settlements. Merchants can receive payments without waiting for a 7-day challenge window.|XLN's consensus commits 100 ms frames ¹¹; Optimism's withdrawals require a week-long challenge period ⁴.|
-|**Capital efficiency**|Credit-line channels free over 80 % of capital otherwise locked in full-reserve channels; hubs can operate on fractional reserves while publishing solvency proofs ¹². Merchants no longer need inbound liquidity.|Uninsured balances are 99 % secure and only up to the hard limit ⁷.|
-|**Multi-asset support**|Entities can hold and trade ERC-20/721/1155 tokens and native coins. Micro-AMMs enable on-the-fly conversion; merchants accept any asset without integrating multiple blockchains. ¹³||
-|**Modular compliance**|The JEA model separates jurisdiction (reserve and dispute settlement) from entities (business logic) ⁶. Compliance officers can audit Merkle proofs without accessing internal state. Entities can implement AML/ KYC modules tailored to their jurisdiction.||
-|**Reduced censorship & single-point-of-failure risk**|Each entity has its own quorum; there is no single sequencer. Misbehaving sequencers in rollups can censor transactions or cause the entire rollup to fail ² ³. XLN decentralizes block production across many sovereign entities.|Optimism currently operates with a single sequencer ¹; many rollups remain centralized ³.|
+|                                                       |                                                                                                                                                                                                                                                               |                                                                                                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Benefit                                               | Real-world implication                                                                                                                                                                                                                                        | Evidence                                                                                                 |
+| **Speed & low latency**                               | Users enjoy sub-second confirmation for most payments because entities commit blocks every 100 ms and hubs have near-instant credit settlements. Merchants can receive payments without waiting for a 7-day challenge window.                                 | XLN's consensus commits 100 ms frames ¹¹; Optimism's withdrawals require a week-long challenge period ⁴. |
+| **Capital efficiency**                                | Credit-line channels free over 80 % of capital otherwise locked in full-reserve channels; hubs can operate on fractional reserves while publishing solvency proofs ¹². Merchants no longer need inbound liquidity.                                            | Uninsured balances are 99 % secure and only up to the hard limit ⁷.                                      |
+| **Multi-asset support**                               | Entities can hold and trade ERC-20/721/1155 tokens and native coins. Micro-AMMs enable on-the-fly conversion; merchants accept any asset without integrating multiple blockchains. ¹³                                                                         |                                                                                                          |
+| **Modular compliance**                                | The JEA model separates jurisdiction (reserve and dispute settlement) from entities (business logic) ⁶. Compliance officers can audit Merkle proofs without accessing internal state. Entities can implement AML/ KYC modules tailored to their jurisdiction. |                                                                                                          |
+| **Reduced censorship & single-point-of-failure risk** | Each entity has its own quorum; there is no single sequencer. Misbehaving sequencers in rollups can censor transactions or cause the entire rollup to fail ² ³. XLN decentralizes block production across many sovereign entities.                            | Optimism currently operates with a single sequencer ¹; many rollups remain centralized ³.                |
 
 ## 5 Development roadmap (high-level)
 
 1. **Foundation (Phase 1)** – Implement deterministic persistence (msgpack with structure tables), depositary contracts, single-asset credit-line channels and CLI wallets. Provide a sandbox testnet for developers.
-    
 2. **Core payments & governance (Phase 2)** – Deploy multi-sig proposals, fractional-reserve proofs, multi-asset ledger, basic merchant SDK and web wallet. Launch hub risk-scoring and insurance modules.
-    
 3. **Cross-chain & liquidity (Phase 3)** – Enable HTLC-based cross-chain swaps, micro-AMM liquidity pools, governance token issuance and dynamic fee markets. Integrate compliance hooks and cross-jurisdiction oracles.
-    
 
 ---
 
 1. **Scalability & enterprise (Phase 4)** – Add sharding, hardware-signing support, batch endpoints, zero-knowledge compression, multi-hub routing and enterprise-grade dashboards. Enhance mobile UX and integrate with existing payment networks.
-    
 
 The logical dependency chain flows from deterministic storage → channels → dispute contract → governance → multi-asset ledger → fractional-reserve proofs → cross-chain swaps → liquidity pools and compliance ¹⁴.
 
@@ -88,15 +79,10 @@ XLN is currently in active development. The Phase 1 testnet (deterministic stora
 ## 7 Glossary
 
 - **Depositary:** An on-chain smart contract that holds reserves and collateral for a specific token. It records Merkle roots of entity states and settles disputes ⁶.
-    
 - **Entity:** A sovereign programmable state machine with its own quorum. Entities manage accounts, credit lines and tokens and interact with a depositary via signed receipts ⁸.
-    
 - **Credit-line channel:** A bilateral account within an entity. One party (hub) extends a soft/hard credit limit to another party; funds can be sent without pre-funding up to the hard limit ⁷.
-    
 - **Soft/hard limit:** The soft limit triggers rebalancing (the hub settles with the depositary) when exceeded; the hard limit is the maximum uninsured exposure a hub is willing to extend ⁷.
-    
 - **Challenge window:** The period during which a state commitment in an optimistic rollup can be challenged. Optimism sets this to 7 days; only after it expires can withdrawals be finalized ⁴.
-    
 
 ---
 
@@ -105,26 +91,18 @@ XLN is currently in active development. The Phase 1 testnet (deterministic stora
 This litepaper is written for multiple audiences:
 
 1. **Crypto-savvy trader** – wants to know why XLN offers better liquidity and faster settlement than LN or rollups; worries about hub risk and cross-chain fees.
-    
 2. **Indie hacker / developer** - cares about how to integrate XLN into a wallet or dApp, the SDKs available and the roadmap for multi-asset support.
-    
 3. **Journalist / analyst** - seeks a high-level story about solving fragmentation and centralization issues; looks for quotes about credit lines and cross-chain integration.
-    
 4. **Regulator / compliance officer** – needs clarity on legal separation (JEA model), solvency proofs and AML/KYC integration.
-    
 
 Each section of the litepaper will build on the previous one (progressive disclosure). Technical terms like "Merkleized RLP tree" will be avoided or linked to a glossary; instead we will use analogies (e.g., "depositary is like a vault at a bank; credit limit is like a credit card"). A graphic or call-out box every few hundred words will illustrate the topology and credit-line flows. Short paragraphs and bullet lists improve readability.
 
 ## 9 References
 
 - XLN docs: adimov-eth/xln and adimov-eth/xln01 repositories (GitHub links to be included; add a QR code linking to the main repo).
-    
 - Homakov, E. "**XLN: Bitcoin Extended Lighting Network**" (Medium), describing inbound liquidity and credit-line channels ¹⁵.
-    
 - Quantstamp **Rollup Security Framework** on sequencer centralization and censorship risks ² ³.
-    
 - Optimism **Rollup protocol overview** on single-sequencer architecture and 7-day challenge window ¹ ⁴.
-    
 
 This document is a living draft. For the latest implementation and community discussion, visit the XLN GitHub repository. Feedback from different personas is welcome and will be incorporated into future revisions.
 
