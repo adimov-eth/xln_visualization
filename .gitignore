@@ -14,6 +14,11 @@ tests/visual/screenshots/
 dist/
 build/
 
+# PM2 logs
+logs/
+.pm2/
+pm2.log
+
 # Environment
 .env
 .env.local

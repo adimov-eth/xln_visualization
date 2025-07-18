@@ -1,104 +1,156 @@
 # XLN Network Interactive Visualization
 
-A real-time, interactive visualization dashboard for the Extended Lightning Network (XLN), providing intuitive insights into network topology, consensus mechanisms, and cross-chain payment flows.
+Extended Lightning Network Interactive Visualization Dashboard built with React + D3.js + Socket.IO.
 
 ## Features
 
-### Phase A - Foundation (Implemented)
-- ✅ Force-directed network topology visualization
-- ✅ Real-time WebSocket updates
-- ✅ Interactive pan, zoom, and drag
-- ✅ Layer-based filtering (Entity, Depositary, Channel)
-- ✅ Metrics dashboard (TVL, node counts)
-- ✅ Performance optimized for 10K+ nodes
-
-### Coming Soon (Phase B-D)
-- 🚧 Consensus visualization animations
-- 🚧 Cross-chain flow animations
-- 🚧 Time machine replay
-- 🚧 Advanced search and filtering
-- 🚧 3D visualization mode
+- **Real-time Network Visualization**: Force-directed graph with 10K+ nodes
+- **Consensus Animation**: Particle effects showing consensus rounds
+- **Entity & Channel Inspection**: Deep dive panels with detailed metrics
+- **WebSocket Integration**: Real-time data streaming
+- **Performance Optimized**: 60 FPS with React.memo optimizations
+- **PM2 Process Management**: Production-ready deployment
 
 ## Quick Start
+
+### Development
 
 ```bash
 # Install dependencies
 npm install
 
-# Start development server
-npm run dev
+# Start development with PM2
+npm run pm2:dev
 
-# Build for production
-npm run build
-
-# Run tests
-npm test
+# Or start with traditional method
+npm start
 ```
 
-The application will open at http://localhost:3000
+### Production
+
+```bash
+# Build the application
+npm run build
+npm run build:server
+
+# Start production with PM2
+npm run pm2:start
+
+# Monitor processes
+npm run pm2:monit
+```
+
+## PM2 Commands
+
+```bash
+# Development
+npm run pm2:dev          # Start development servers
+npm run pm2:stop         # Stop all processes
+npm run pm2:restart      # Restart all processes
+npm run pm2:status       # Check process status
+npm run pm2:logs         # View logs
+npm run pm2:monit        # Monitor dashboard
+
+# Production
+npm run pm2:start        # Start production servers
+npm run pm2:reload       # Zero-downtime reload
+npm run pm2:delete       # Delete all processes
+npm run pm2:flush        # Clear logs
+```
 
 ## Architecture
 
-The application uses a performance-first architecture:
+### Services
 
-- **Frontend**: React 18 + TypeScript + D3.js
-- **State Management**: Zustand with immer
-- **Real-time**: WebSocket with delta compression
-- **Rendering**: Multi-layer approach (WebGL ready)
-- **Testing**: Jest + React Testing Library
+- **WebSocket Server** (Port 4001): Real-time data streaming with Socket.IO
+- **Development Server** (Port 4000): Webpack dev server with hot reload
+- **Production Server** (Port 4000): Static file serving with `serve`
+
+### Process Management
+
+- **Development**: Single instance with file watching
+- **Production**: Clustered instances with auto-restart and health monitoring
+
+## Configuration
+
+### Development (`ecosystem.config.js`)
+
+- WebSocket server with TypeScript and file watching
+- Webpack dev server with hot reload
+- Single instance per service
+
+### Production (`ecosystem.config.production.js`)
+
+- Clustered WebSocket server for scalability
+- Static file serving with multiple instances
+- Health monitoring and auto-restart
+- Log rotation and performance monitoring
+
+## Logs
+
+All logs are stored in the `logs/` directory:
+
+- `websocket-server-*.log`: WebSocket server logs
+- `webpack-dev-server-*.log`: Development server logs (dev only)
+- `static-server-*.log`: Static file server logs (production only)
+
+## Technology Stack
+
+- **Frontend**: React 18, D3.js, TypeScript
+- **Backend**: Node.js, Socket.IO, Express
+- **Build**: Webpack 5, TypeScript
+- **Process Management**: PM2
+- **Testing**: Jest, React Testing Library
 
 ## Project Structure
 
 ```
-src/d3-app/
-├── components/        # React components
-├── services/         # WebSocket, API services
-├── types/           # TypeScript definitions
-├── utils/           # Helper functions
-├── hooks/           # Custom React hooks
-├── contexts/        # React contexts
-├── styles/          # CSS modules
-└── docs/            # Architecture documentation
+XLN/
+├── src/
+│   ├── d3-app/              # React visualization app
+│   │   ├── components/      # React components
+│   │   ├── services/        # WebSocket & consensus services
+│   │   ├── utils/          # Utilities and mock data
+│   │   └── types/          # TypeScript definitions
+│   └── server/             # WebSocket server
+├── tests/                  # Test suites
+├── logs/                   # PM2 logs
+├── ecosystem.config.js     # PM2 development config
+├── ecosystem.config.production.js  # PM2 production config
+└── webpack.config.js       # Webpack configuration
 ```
 
 ## Performance
 
-The visualization is optimized to handle:
-- 10,000+ nodes at 60 FPS
-- Real-time updates via WebSocket
-- Sub-100ms interaction response time
-- Progressive data loading
+- **60 FPS** visualization with optimized React rendering
+- **Real-time** WebSocket data streaming
+- **Clustered** production deployment
+- **Auto-scaling** based on CPU cores
+- **Memory monitoring** with automatic restart
 
-## Development
+## Monitoring
 
-### Requirements
-- Node.js >= 16.0.0
-- npm >= 8.0.0
+PM2 provides comprehensive monitoring:
 
-### Testing
+- Process health and uptime
+- Memory and CPU usage
+- Auto-restart on crashes
+- Log aggregation and rotation
+- Performance metrics
+
+View the monitoring dashboard:
 ```bash
-npm run test:unit          # Unit tests
-npm run test:integration   # Integration tests
-npm run test:performance   # Performance benchmarks
-npm run test:accessibility # WCAG compliance
-npm run test:visual        # Visual regression
+npm run pm2:monit
 ```
 
-### Code Quality
-```bash
-npm run lint       # ESLint
-npm run type-check # TypeScript validation
-```
+## Contributing
 
-## Documentation
-
-- [Architecture Overview](./src/d3-app/ARCHITECTURE.md)
-- [State Management](./src/d3-app/docs/STATE_MANAGEMENT.md)
-- [WebGL Performance](./src/d3-app/docs/WEBGL_PERFORMANCE.md)
-- [Data Flow](./src/d3-app/docs/DATA_FLOW.md)
-- [Component Patterns](./src/d3-app/docs/COMPONENT_PATTERNS.md)
-- [Plugin Development](./src/d3-app/docs/EXTENSIBILITY.md)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-Copyright (c) 2025 XLN Network
+MIT License - see LICENSE file for details.
