@@ -2,7 +2,9 @@ module.exports = {
   apps: [
     {
       name: 'xln-websocket-server',
-      script: 'dist/server/server.js',
+      script: 'src/server/server.ts',
+      interpreter: 'bun',
+      interpreter_args: '--tsconfig-override tsconfig.server.json',
       env: {
         NODE_ENV: 'production',
         WS_PORT: 4001
@@ -28,8 +30,8 @@ module.exports = {
     },
     {
       name: 'xln-static-server',
-      script: 'serve',
-      args: '-s dist -l 4000',
+      script: 'bun',
+      args: 'run --bun serve -s dist -l 4000',
       env: {
         NODE_ENV: 'production'
       },

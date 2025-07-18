@@ -3,8 +3,8 @@ module.exports = {
     {
       name: 'xln-websocket-server',
       script: 'src/server/server.ts',
-      interpreter: 'ts-node',
-      interpreter_args: '--project tsconfig.server.json',
+      interpreter: 'bun',
+      interpreter_args: '--tsconfig-override tsconfig.server.json',
       env: {
         NODE_ENV: 'development',
         WS_PORT: 4001
@@ -25,8 +25,8 @@ module.exports = {
     },
     {
       name: 'xln-webpack-dev-server',
-      script: 'webpack',
-      args: 'serve --mode development --port 4000',
+      script: 'bun',
+      args: 'run dev',
       env: {
         NODE_ENV: 'development'
       },

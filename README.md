@@ -17,45 +17,45 @@ Extended Lightning Network Interactive Visualization Dashboard built with React 
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Start development with PM2
-npm run pm2:dev
+bun run pm2:dev
 
 # Or start with traditional method
-npm start
+bun start
 ```
 
 ### Production
 
 ```bash
 # Build the application
-npm run build
-npm run build:server
+bun run build
+bun run build:server
 
 # Start production with PM2
-npm run pm2:start
+bun run pm2:start
 
 # Monitor processes
-npm run pm2:monit
+bun run pm2:monit
 ```
 
 ## PM2 Commands
 
 ```bash
 # Development
-npm run pm2:dev          # Start development servers
-npm run pm2:stop         # Stop all processes
-npm run pm2:restart      # Restart all processes
-npm run pm2:status       # Check process status
-npm run pm2:logs         # View logs
-npm run pm2:monit        # Monitor dashboard
+bun run pm2:dev          # Start development servers
+bun run pm2:stop         # Stop all processes
+bun run pm2:restart      # Restart all processes
+bun run pm2:status       # Check process status
+bun run pm2:logs         # View logs
+bun run pm2:monit        # Monitor dashboard
 
 # Production
-npm run pm2:start        # Start production servers
-npm run pm2:reload       # Zero-downtime reload
-npm run pm2:delete       # Delete all processes
-npm run pm2:flush        # Clear logs
+bun run pm2:start        # Start production servers
+bun run pm2:reload       # Zero-downtime reload
+bun run pm2:delete       # Delete all processes
+bun run pm2:flush        # Clear logs
 ```
 
 ## Architecture
@@ -98,9 +98,10 @@ All logs are stored in the `logs/` directory:
 
 - **Frontend**: React 18, D3.js, TypeScript
 - **Backend**: Node.js, Socket.IO, Express
+- **Runtime**: Bun (JavaScript/TypeScript runtime)
 - **Build**: Webpack 5, TypeScript
 - **Process Management**: PM2
-- **Testing**: Jest, React Testing Library
+- **Testing**: Bun Test, React Testing Library
 
 ## Project Structure
 
@@ -140,7 +141,7 @@ PM2 provides comprehensive monitoring:
 
 View the monitoring dashboard:
 ```bash
-npm run pm2:monit
+bun run pm2:monit
 ```
 
 ## Contributing
